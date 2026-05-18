@@ -1,0 +1,87 @@
+{
+  "onboarding": {
+    "welcomeTitle": "Smart Class Reminder",
+    "welcomeSubtitle": "Never miss a class again. Manage your schedule easily and get notified on time.",
+    "getStarted": "Get Started",
+    "selectLanguage": "Select Language",
+    "selectTheme": "Select Theme",
+    "continue": "Continue",
+    "setupTitle": "How would you like to add your schedule?",
+    "uploadPhoto": "Upload Schedule Photo",
+    "uploadDesc": "We'll automatically extract your classes using AI",
+    "enterManually": "Enter Manually",
+    "manualDesc": "Add your classes one by one manually",
+    "apiKeyTitle": "Claude API Key",
+    "apiKeyDesc": "To automatically extract your schedule from a photo, please enter your Anthropic Claude API Key. This is stored securely on your device.",
+    "apiKeyPlaceholder": "sk-ant-api03-...",
+    "skipForNow": "Skip for now (Manual entry only)"
+  },
+  "home": {
+    "title": "Class Schedule",
+    "addNew": "Add New Class",
+    "noClasses": "No classes today"
+  },
+  "days": {
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday",
+    "mon": "Mon",
+    "tue": "Tue",
+    "wed": "Wed",
+    "thu": "Thu",
+    "fri": "Fri",
+    "sat": "Sat",
+    "sun": "Sun"
+  },
+  "class": {
+    "courseName": "Course Name",
+    "teacher": "Teacher",
+    "classroom": "Classroom",
+    "time": "Time",
+    "notes": "Notes",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "deleteConfirmTitle": "Delete Class",
+    "deleteConfirmDesc": "Are you sure you want to delete this class?",
+    "startTime": "Start Time",
+    "endTime": "End Time"
+  },
+  "scan": {
+    "title": "Scan Result",
+    "confirmTitle": "Confirm Your Schedule",
+    "reviewText": "Please review the extracted classes and make any necessary changes before saving.",
+    "saveAll": "Save Schedule",
+    "processing": "Processing image with AI...",
+    "error": "Failed to process image. Please try again or enter manually."
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "darkMode": "Dark",
+    "lightMode": "Light",
+    "systemMode": "System",
+    "notifications": "Notifications",
+    "notificationTime": "Notification Time",
+    "minutesBefore": "{{minutes}} minutes before",
+    "editSchedule": "Edit Schedule",
+    "deleteSchedule": "Delete Schedule",
+    "developer": "Developer",
+    "apiKey": "Claude API Key",
+    "updateKey": "Update Key",
+    "deleteScheduleConfirm": "Are you sure you want to delete your entire schedule? This cannot be undone."
+  },
+  "developer": {
+    "madeBy": "Developed by",
+    "viewLinkedIn": "View on LinkedIn"
+  },
+  "notifications": {
+    "classStarts": "{{courseName}} starts in {{minutes}} minutes! (Room: {{classroom}})"
+  }
+}
