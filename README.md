@@ -1,4 +1,4 @@
-# 📚 Class Reminder — AI-Powered Class Schedule & Reminder App
+# Class Reminder — AI-Powered Class Schedule & Reminder App
 
 <div align="center">
 
@@ -14,7 +14,7 @@ Built with **React Native** · **TypeScript** · **Expo SDK 54** · **Google Gem
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 <div align="center">
 <table>
@@ -43,14 +43,14 @@ Built with **React Native** · **TypeScript** · **Expo SDK 54** · **Google Gem
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-### 🤖 AI-Powered Timetable Scanner
+### AI-Powered Timetable Scanner
 - **Zero Manual Entry**: Upload a photo or PDF of your printed/digital class schedule.
 - **Google Gemini 2.0 Flash Integration**: The AI analyzes the image and extracts course names, lecturers, classrooms, days, and time slots automatically.
 - **Multi-Format Support**: Accepts JPEG/PNG images from gallery and PDF documents from file manager.
 
-### 🔔 Smart Notification System
+### Smart Notification System
 - **Pre-Class Reminders**: Configurable alerts 5, 10, 15, 20, or 30 minutes before each class.
 - **Class Mode (Mute Reminder)**: Sends a notification exactly when class starts reminding you to silence your phone. Three modes available:
   - `Off` — Disabled
@@ -59,7 +59,7 @@ Built with **React Native** · **TypeScript** · **Expo SDK 54** · **Google Gem
 - **Attendance Check**: Automatic notification at the end of each class asking *"Did you attend today?"*
 - **Offline First**: All notifications are scheduled locally — no server required.
 
-### 📉 Attendance Tracker
+### Attendance Tracker
 - **Track Absences Per Class**: Each class detail page includes a dedicated attendance card with `+` / `−` buttons.
 - **Visual Progress Bar**: Color-coded progress indicator:
   - 🟢 **Normal** (purple) — Under 75% used
@@ -67,38 +67,38 @@ Built with **React Native** · **TypeScript** · **Expo SDK 54** · **Google Gem
   - 🔴 **Danger** (red) — Limit exceeded with **"LİMİT AŞILDI!"** alert
 - **Editable Limits**: Tap the limit to customize it per class (default: 4 weeks).
 
-### 📅 Weekly Grid View
+### Weekly Grid View
 - **Timetable Grid**: Toggle between the daily list view and a beautiful **Monday–Friday hourly grid** showing all classes as positioned time blocks.
 - **Smart Overlap Handling**: Overlapping classes are cascaded with solid backgrounds and shadows for clear visibility.
 - **Toggle in Settings**: Switch between views anytime from the Settings page.
 
-### 🗓️ Calendar Sync (Google / Apple Calendar)
+### Calendar Sync (Google / Apple Calendar)
 - **One-Tap Export**: Sync your entire schedule to any writable calendar on your phone (Google Calendar, Samsung Calendar, Apple Calendar, etc.).
 - **Calendar Picker**: Choose which calendar to sync to from a list of available calendars.
 - **16-Week Recurring Events**: Classes are added as weekly recurring events for an entire semester.
 
-### 🖼️ Android Home Screen Widget
+### Android Home Screen Widget
 - **"Next Class" Widget**: Displays your upcoming class name, time, and room directly on your Android home screen.
 - **Auto-Updates**: Widget refreshes automatically whenever you add, edit, or delete a class.
 - ⚠️ *Requires a native build (APK/AAB) — not available in Expo Go.*
 
-### 🔐 Secure Key Storage (BYOK)
+### Secure Key Storage (BYOK)
 - **Bring Your Own Key**: Users enter their own Google Gemini API key during onboarding.
 - **Hardware-Backed Encryption**: API keys are stored securely using iOS Keychain / Android Keystore via `expo-secure-store`.
 - **Updatable**: Change your API key anytime from Settings.
 
-### 🎨 Premium Glassmorphism Design
+### Premium Glassmorphism Design
 - **Dark & Light Themes**: Sleek charcoal dark mode with neon purple glows, or elegant lavender-white light mode.
 - **Blur Effects**: iOS-style `expo-blur` glass cards on the tab bar.
 - **System Preference Sync**: Automatically follows your device's theme preference.
 
-### 🌍 Bilingual Support (TR / EN)
+### Bilingual Support (TR / EN)
 - **Turkish & English**: Fully localized UI using `i18next` and `react-i18next`.
 - **Auto-Detection**: Detects device locale via `expo-localization` to set the default language.
 
 ---
 
-## 🏗️ Architecture & Project Structure
+## Architecture & Project Structure
 
 Built with **Expo Router v3** (file-based navigation), React Context for state management, and modular service layers.
 
@@ -152,7 +152,7 @@ class-reminder/
 
 ---
 
-## 📊 Data Model
+## Data Model
 
 ### `ClassSession` Interface
 
@@ -173,7 +173,7 @@ export interface ClassSession {
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - **Node.js** v18 or above
@@ -206,7 +206,7 @@ npx expo start
 
 ---
 
-## 🔒 Permissions
+## Permissions
 
 | Permission | Platform | Purpose |
 |---|---|---|
@@ -218,7 +218,7 @@ npx expo start
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Technology | Purpose |
 |---|---|
@@ -237,7 +237,7 @@ npx expo start
 
 ---
 
-## 👨‍💻 Developer
+## Developer
 
 **Arda Meçik**
 
@@ -245,6 +245,6 @@ npx expo start
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
