@@ -1,207 +1,250 @@
-# Class Reminder — AI-Powered Class Schedule & Reminder Assistant
+# 📚 Class Reminder — AI-Powered Class Schedule & Reminder App
 
-An elegant, premium, and feature-rich cross-platform mobile application built with **React Native**, **TypeScript**, and **Expo 54** that ensures students never miss a class. By combining **Anthropic Claude 3.7 Sonnet AI vision** with local scheduling logic, the app allows users to simply snap a picture of their printed or digital timetable, instantly parses it into structured data, and automatically schedules weekly recurring notifications ahead of each class.
+<div align="center">
 
-Designed with a state-of-the-art glassmorphism look, vibrant purple glow aesthetics, fluid animations, and dual-language capabilities, **Class Reminder** represents a premium academic utility app.
+**An elegant, premium, cross-platform mobile app that ensures students never miss a class.**
 
----
+Built with **React Native** · **TypeScript** · **Expo SDK 54** · **Google Gemini 2.0 Flash AI**
 
-## Key Features
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Expo SDK](https://img.shields.io/badge/Expo-SDK%2054-blue.svg)](https://expo.dev)
+[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-green.svg)](#)
 
-### 1. AI-Powered Timetable Vision Scanner
-*   **Zero Manual Entry**: Snap a picture or upload an image of a weekly class schedule (printed paper, school website screenshot, or pdf export).
-*   **Anthropic Claude API Integration**: Powered by the advanced `claude-sonnet-4-20250514` model. The AI scans the schedule and extracts course names, lecturers, classrooms, days of the week, and starting/ending times.
-*   **Deterministic Schema Extraction**: The prompt restricts the LLM to output a clean, strict JSON array schema directly mapped to TypeScript interfaces, bypassing conversational noise.
-
-### 2. Intelligent Recurring Notifications
-*   **Local Scheduling Engine**: Uses `expo-notifications` to calculate next-class occurrences and program weekly recurring notifications directly into iOS/Android native calendar services.
-*   **Custom Offset Reminders**: Users can configure exactly how many minutes before class (e.g., 5, 10, 15, 30 minutes) they want to receive the alerts.
-*   **Offline First**: No webhooks or background servers required; all reminders are scheduled locally on the device.
-
-### 3. Hardware-Backed Secure Key Storage
-*   **Bring Your Own Key (BYOK)**: Users enter their own Anthropic Claude API key during onboarding.
-*   **Military-Grade Encryption**: The API key is securely encrypted and stored on-device using iOS Keychain or Android Keystore via `expo-secure-store`.
-
-### 4. Fluid Premium Glassmorphism Design
-*   **Aesthetics First**: A gorgeous dark/light theme engine centered around interactive glows, neon purple accents, smooth gradients, and glass cards.
-*   **Micro-Animations**: Enhanced user interfaces with `react-native-reanimated` transitions and `expo-blur` cards.
-*   **System Preference Sync**: Automatically detects and adapts to the system theme mode, while allowing direct overrides in Settings.
-
-### 5. Native Bilingual Support
-*   **Turkish & English**: Fully localized from the ground up using `i18next` and `react-i18next` context.
-*   **Auto-Detection**: Dynamically queries device locale with `expo-localization` to set the default language during onboarding.
+</div>
 
 ---
 
-## Architecture & Folder Directory
+## 📸 Screenshots
 
-The project is designed using the modular, modern **Expo Router v3 (file-based navigation)** structure, separate state contexts, and atomic business-logic services.
+<div align="center">
+<table>
+  <tr>
+    <td align="center"><strong>API Key Setup</strong></td>
+    <td align="center"><strong>Daily Schedule View</strong></td>
+    <td align="center"><strong>Settings Page</strong></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/1.jpg" width="250"/></td>
+    <td><img src="screenshots/4.jpg" width="250"/></td>
+    <td><img src="screenshots/5.jpg" width="250"/></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Settings (AI & Sync)</strong></td>
+    <td align="center"><strong>Class Detail & Attendance</strong></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/2.jpg" width="250"/></td>
+    <td><img src="screenshots/3.jpg" width="250"/></td>
+    <td></td>
+  </tr>
+</table>
+</div>
+
+---
+
+## ✨ Key Features
+
+### 🤖 AI-Powered Timetable Scanner
+- **Zero Manual Entry**: Upload a photo or PDF of your printed/digital class schedule.
+- **Google Gemini 2.0 Flash Integration**: The AI analyzes the image and extracts course names, lecturers, classrooms, days, and time slots automatically.
+- **Multi-Format Support**: Accepts JPEG/PNG images from gallery and PDF documents from file manager.
+
+### 🔔 Smart Notification System
+- **Pre-Class Reminders**: Configurable alerts 5, 10, 15, 20, or 30 minutes before each class.
+- **Class Mode (Mute Reminder)**: Sends a notification exactly when class starts reminding you to silence your phone. Three modes available:
+  - `Off` — Disabled
+  - `Notification` — Simple reminder notification
+  - `Settings Shortcut` — Tapping the notification opens Android Sound Settings directly
+- **Attendance Check**: Automatic notification at the end of each class asking *"Did you attend today?"*
+- **Offline First**: All notifications are scheduled locally — no server required.
+
+### 📉 Attendance Tracker
+- **Track Absences Per Class**: Each class detail page includes a dedicated attendance card with `+` / `−` buttons.
+- **Visual Progress Bar**: Color-coded progress indicator:
+  - 🟢 **Normal** (purple) — Under 75% used
+  - 🟡 **Warning** (yellow) — 75%+ absences used
+  - 🔴 **Danger** (red) — Limit exceeded with **"LİMİT AŞILDI!"** alert
+- **Editable Limits**: Tap the limit to customize it per class (default: 4 weeks).
+
+### 📅 Weekly Grid View
+- **Timetable Grid**: Toggle between the daily list view and a beautiful **Monday–Friday hourly grid** showing all classes as positioned time blocks.
+- **Smart Overlap Handling**: Overlapping classes are cascaded with solid backgrounds and shadows for clear visibility.
+- **Toggle in Settings**: Switch between views anytime from the Settings page.
+
+### 🗓️ Calendar Sync (Google / Apple Calendar)
+- **One-Tap Export**: Sync your entire schedule to any writable calendar on your phone (Google Calendar, Samsung Calendar, Apple Calendar, etc.).
+- **Calendar Picker**: Choose which calendar to sync to from a list of available calendars.
+- **16-Week Recurring Events**: Classes are added as weekly recurring events for an entire semester.
+
+### 🖼️ Android Home Screen Widget
+- **"Next Class" Widget**: Displays your upcoming class name, time, and room directly on your Android home screen.
+- **Auto-Updates**: Widget refreshes automatically whenever you add, edit, or delete a class.
+- ⚠️ *Requires a native build (APK/AAB) — not available in Expo Go.*
+
+### 🔐 Secure Key Storage (BYOK)
+- **Bring Your Own Key**: Users enter their own Google Gemini API key during onboarding.
+- **Hardware-Backed Encryption**: API keys are stored securely using iOS Keychain / Android Keystore via `expo-secure-store`.
+- **Updatable**: Change your API key anytime from Settings.
+
+### 🎨 Premium Glassmorphism Design
+- **Dark & Light Themes**: Sleek charcoal dark mode with neon purple glows, or elegant lavender-white light mode.
+- **Blur Effects**: iOS-style `expo-blur` glass cards on the tab bar.
+- **System Preference Sync**: Automatically follows your device's theme preference.
+
+### 🌍 Bilingual Support (TR / EN)
+- **Turkish & English**: Fully localized UI using `i18next` and `react-i18next`.
+- **Auto-Detection**: Detects device locale via `expo-localization` to set the default language.
+
+---
+
+## 🏗️ Architecture & Project Structure
+
+Built with **Expo Router v3** (file-based navigation), React Context for state management, and modular service layers.
 
 ```bash
 class-reminder/
-├── app/                      # Expo Router Navigation & Screen Declarations
-│   ├── (tabs)/               # Main Tab Navigator
-│   │   ├── _layout.tsx       # Bottom Tab Configuration & Styling
-│   │   ├── home.tsx          # Timetable Calendar Feed & Schedule List
-│   │   ├── settings.tsx      # Notification Prefs, Theme, Language, API Keys
-│   │   └── index.tsx         # Tab entry coordinator
-│   ├── onboarding/           # Seamless 5-Step First Run Flow
-│   │   ├── _layout.tsx       # Onboarding navigation wrapper
-│   │   ├── welcome.tsx       # App introduction
-│   │   ├── language.tsx      # Language selector (EN / TR)
-│   │   ├── theme.tsx         # Theme preset selector (Dark / Light / System)
-│   │   ├── api-key.tsx       # Secure API key entry screen
-│   │   └── schedule-setup.tsx# Quick choice: manual entry or AI scan onboarding
+├── app/                        # Expo Router Screens
+│   ├── (tabs)/                 # Main Tab Navigator
+│   │   ├── _layout.tsx         # Tab bar config with blur effects
+│   │   ├── home.tsx            # Daily list view + Weekly grid view toggle
+│   │   └── settings.tsx        # All preferences & feature controls
+│   ├── onboarding/             # First-run setup flow
+│   │   ├── welcome.tsx         # App introduction
+│   │   ├── language.tsx        # Language selector
+│   │   ├── theme.tsx           # Theme picker
+│   │   ├── api-key.tsx         # Gemini API key entry
+│   │   └── schedule-setup.tsx  # Upload or manual entry choice
 │   ├── class/
-│   │   └── [id].tsx          # Dynamic route: view/edit/delete a class session
-│   ├── add-class.tsx         # Manual class creator modal
-│   ├── scan-result.tsx       # AI Scan preview, verify, and import interface
-│   ├── modal.tsx             # Pop-up information portal
-│   ├── _layout.tsx           # Global Root Navigation & Context Providers
-│   └── index.tsx             # Decides whether to route to Onboarding or Tabs
-├── src/                      # Core Shared Application Code
-│   ├── components/           # Reusable Premium UI Blocks (Buttons, Cards, Modals)
-│   ├── contexts/             # Global Application State Contexts
-│   │   ├── ThemeContext.tsx     # Handles themes, preferences, and dynamic CSS styling
-│   │   ├── LanguageContext.tsx  # Coordinates translation engines and local languages
-│   │   └── ScheduleContext.tsx  # Handles CRUD on async storage classes & notification syncing
-│   ├── i18n/                 # Localization translation mappings
-│   │   ├── en.json              # English String Translations
-│   │   ├── tr.json              # Turkish String Translations
-│   │   └── index.ts             # i18n instance initialization
-│   ├── services/             # Core Backend Utility Services
-│   │   ├── claude.ts            # API service calls to Anthropic for AI scanning
-│   │   ├── notifications.ts     # Local Expo Notification scheduler algorithm
-│   │   └── secureStorage.ts     # Wrapper for secure reading/writing of keys
-│   ├── themes/               # Color tokens and gradient settings
-│   ├── types/                # Strict TypeScript global interfaces
-│   └── utils/                # Constants and common pure helper functions
-├── assets/                   # Vector assets, high-res splash screens, and app icon
-├── app.json                  # Expo Project & Permissions Configuration
-├── package.json              # App dependencies and scripts
-└── tsconfig.json             # TypeScript configuration
+│   │   └── [id].tsx            # Class detail + Attendance tracker
+│   ├── add-class.tsx           # Manual class creation form
+│   ├── scan-result.tsx         # AI scan preview & import
+│   └── _layout.tsx             # Root layout with providers
+├── src/
+│   ├── components/             # Reusable UI components
+│   │   ├── ClassCard.tsx       # Class list item card
+│   │   ├── DaySelector.tsx     # Horizontal day tabs
+│   │   ├── WeeklyGridView.tsx  # Weekly timetable grid
+│   │   └── DeveloperCredit.tsx # Footer credit component
+│   ├── contexts/               # React Context providers
+│   │   ├── ThemeContext.tsx     # Dark/Light theme management
+│   │   ├── LanguageContext.tsx  # i18n language management
+│   │   └── ScheduleContext.tsx  # Class CRUD + widget updates
+│   ├── services/               # Business logic services
+│   │   ├── gemini.ts           # Gemini 2.0 Flash API integration
+│   │   ├── notifications.ts   # Notification scheduling engine
+│   │   ├── calendarSync.ts    # Calendar export & sync service
+│   │   └── secureStorage.ts   # Secure key read/write wrapper
+│   ├── i18n/                   # Localization files
+│   │   ├── en.json             # English translations
+│   │   ├── tr.json             # Turkish translations
+│   │   └── index.ts            # i18n initialization
+│   ├── themes/                 # Color tokens & gradients
+│   ├── types/                  # TypeScript interfaces
+│   └── utils/                  # Constants & helpers
+├── widget/                     # Android Home Screen Widget
+│   ├── NextClassWidget.tsx     # Widget UI component
+│   └── WidgetTaskHandler.tsx   # Widget background update logic
+├── app.json                    # Expo config & native plugins
+├── package.json                # Dependencies & scripts
+└── tsconfig.json               # TypeScript config
 ```
 
 ---
 
-## Key Data Schema & TypeScript Types
+## 📊 Data Model
 
-### `ClassSession`
-Every class or lecture is defined by the following strongly-typed schema in [types/index.ts](file:///c:/Users/ardam/Desktop/class-reminder/src/types/index.ts):
+### `ClassSession` Interface
 
 ```typescript
 export interface ClassSession {
-  id: string;          // Unique UUID string
-  courseName: string;  // E.g., "Advanced Calculus"
-  teacher?: string;    // E.g., "Dr. Ada Lovelace" (Optional)
-  classroom?: string;  // E.g., "Room 301 / Lab B" (Optional)
+  id: string;          // Unique UUID
+  courseName: string;  // e.g., "Advanced Calculus"
+  teacher?: string;    // e.g., "Prof. Dr. Deniz AĞIRSEVEN"
+  classroom?: string;  // e.g., "Amfi 3"
   day: number;         // 0-6 (0 = Monday, 6 = Sunday)
   startTime: string;   // "HH:MM" format (24h)
   endTime: string;     // "HH:MM" format (24h)
   notes?: string;      // Optional student notes
+  absences?: number;   // Number of absences recorded
+  absenceLimit?: number; // Max absences allowed
 }
 ```
 
 ---
 
-## Deep Dive: Core Service Implementations
-
-### 1. The Claude Vision Prompt & Response Handling
-The `scanSchedule` function in `src/services/claude.ts` encodes images to `base64` and sends them via the Claude Messages API using the `claude-sonnet-4-20250514` model. The prompt utilizes highly detailed systems parameters to guarantee structured JSON output. 
-
-```typescript
-// Strict API Instructions
-const prompt = `Extract class schedule information from this image. Return strictly in JSON format with exactly this structure:
-{
-  "classes": [
-    {
-      "courseName": "string",
-      "teacher": "string (optional)",
-      "classroom": "string (optional)",
-      "day": number (0-6 where 0 is Monday, 6 is Sunday),
-      "startTime": "string (HH:MM format)",
-      "endTime": "string (HH:MM format)"
-    }
-  ]
-}
-Do not include any other text or explanation, only the JSON object.`;
-```
-Once Claude replies, the service parses the text, utilizes regex boundaries to safely find the JSON brackets in case of markdown formatting (`/\{[\s\S]*\}/`), and maps it directly to the UI preview state.
-
-### 2. The Recurrence Calculator
-Because iOS and Android notifications use different weekday mapping, and the app counts **Monday** as `0` and **Sunday** as `6`, the notification service in `src/services/notifications.ts` dynamically translates local app calendars to the system Schedulable triggers.
-
-It determines the precise upcoming target calendar date with the configured minute-offset:
-```typescript
-const triggerDate = calculateNextOccurrence(session.day, session.startTime, minutesBefore);
-```
-And triggers an Expo Calendar Alarm:
-```typescript
-await Notifications.scheduleNotificationAsync({
-  content: {
-    title: language === 'tr' ? 'Ders Hatırlatıcısı' : 'Class Reminder',
-    body: bodyText,
-    data: { classId: session.id },
-    sound: true,
-  },
-  trigger: {
-    type: Notifications.SchedulableTriggerInputTypes.CALENDAR,
-    weekday: session.day === 6 ? 1 : session.day + 2, // Map App 0-6 to iOS/Android Calendar 1-7 (Sun=1)
-    hour: triggerDate.getHours(),
-    minute: triggerDate.getMinutes(),
-    repeats: true,
-  },
-});
-```
-
----
-
-## Setup & Installation Guide
-
-To run this application locally on your machine or on an interactive mobile device, please follow these instructions:
+## 🚀 Getting Started
 
 ### Prerequisites
-*   Make sure you have **Node.js (v18 or above)** installed.
-*   Install the **Expo Go** application on your physical Android or iOS device from the Play Store / App Store to test wirelessly.
+- **Node.js** v18 or above
+- **Expo Go** app on your Android/iOS device ([Play Store](https://play.google.com/store/apps/details?id=host.exp.exponent) / [App Store](https://apps.apple.com/app/expo-go/id982107779))
+- A **Google Gemini API Key** (free from [Google AI Studio](https://aistudio.google.com/apikey))
 
-### 1. Clone & Install Dependencies
-Navigate into your local workspace directory and install all packages:
+### 1. Clone & Install
+
 ```bash
-# Navigate to project
+git clone https://github.com/mecik-arda/class-reminder.git
 cd class-reminder
-
-# Install npm dependencies
 npm install
 ```
 
-### 2. Start the Development Server
-Execute the start script to bundle the application using Expo Metro Bundler:
+### 2. Start Development Server
+
 ```bash
-npm run start
+npx expo start
 ```
-*   This will launch the **Expo Developer Tools** in your terminal and print a **QR Code**.
 
-### 3. Connect to a Mobile Device
-*   **Android**: Open the *Expo Go* app, select "Scan QR Code", and scan the terminal QR.
-*   **iOS**: Open your native *Camera* app, scan the terminal QR, and click the link to launch inside *Expo Go*.
-*   *Make sure both your computer and phone are connected to the exact same Wi-Fi network.*
+### 3. Connect Your Device
+- **Android**: Open Expo Go → Scan the QR code from terminal
+- **iOS**: Open Camera → Scan the QR code → Open in Expo Go
+- ⚠️ Both devices must be on the **same Wi-Fi network**
 
----
-
-## Permissions Config
-The application requests the following native device permissions configured securely in `app.json`:
-*   **Camera Permission**: `NSCameraUsageDescription` / `android.permission.CAMERA` (For taking photos of schedules)
-*   **Photo Library Access**: `expo-image-picker` permissions (For picking existing schedule screenshots)
-*   **Push Notifications**: `expo-notifications` permissions (For triggering background calendar reminder alarms)
-*   **Exact Alarm Scheduler**: `android.permission.SCHEDULE_EXACT_ALARM` (For micro-second precision wake triggers)
+### 4. Get Your API Key
+1. Go to [Google AI Studio](https://aistudio.google.com/apikey)
+2. Create a free API key
+3. Enter it in the app during onboarding or in Settings → Update Key
 
 ---
 
-## Theme & Typography Token Settings
-The system contains pre-configured theme colors (both light/dark variations) in [types/index.ts](file:///c:/Users/ardam/Desktop/class-reminder/src/types/index.ts):
-*   **Dark Mode**: Sleek charcoal backgrounds (`#121214`), dark violet containers, high contrast white text, and strong neon purple `#8B5CF6` ambient glow vectors.
-*   **Light Mode**: Soft lavender-grey backgrounds (`#F5F5FA`), crisp white cards with elegant shadows, dark charcoal text, and soft violet button highlights.
+## 🔒 Permissions
 
-## License
+| Permission | Platform | Purpose |
+|---|---|---|
+| Camera | Android / iOS | Scan class schedules via camera |
+| Photo Library | Android / iOS | Upload schedule images from gallery |
+| Notifications | Android / iOS | Class reminders & attendance checks |
+| Exact Alarm | Android | Precise notification scheduling |
+| Calendar | Android / iOS | Sync schedule to device calendar |
 
-This project is licensed under the MIT License - see the [LICENSE](file:///c:/Users/ardam/Desktop/class-reminder/LICENSE) file for details.
+---
+
+## 🛠️ Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| React Native 0.81 | Cross-platform mobile framework |
+| Expo SDK 54 | Development & build toolchain |
+| TypeScript | Type-safe codebase |
+| Expo Router v3 | File-based navigation |
+| Google Gemini 2.0 Flash | AI vision for schedule extraction |
+| expo-notifications | Local push notification scheduling |
+| expo-secure-store | Hardware-backed key encryption |
+| expo-calendar | Native calendar integration |
+| expo-blur | iOS glassmorphism effects |
+| react-native-android-widget | Android home screen widget |
+| i18next | Internationalization (TR/EN) |
+| AsyncStorage | Local data persistence |
+
+---
+
+## 👨‍💻 Developer
+
+**Arda Meçik**
+
+- GitHub: [@mecik-arda](https://github.com/mecik-arda)
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.

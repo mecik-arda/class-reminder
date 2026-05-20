@@ -50,6 +50,15 @@ const getAreNotificationsEnabled = async (): Promise<boolean> => {
   }
 };
 
+const getClassModeType = async (): Promise<string> => {
+  try {
+    const value = await AsyncStorage.getItem(STORAGE_KEYS.CLASS_MODE_TYPE);
+    return value || DEFAULT_PREFERENCES.CLASS_MODE_TYPE;
+  } catch (error) {
+    return DEFAULT_PREFERENCES.CLASS_MODE_TYPE;
+  }
+};
+
 // Calculate the next occurrence of a specific time and day
 const calculateNextOccurrence = (dayOfWeek: number, timeString: string, minutesBefore: number): Date => {
   const [hours, minutes] = timeString.split(':').map(Number);
@@ -86,6 +95,7 @@ export const scheduleClassNotifications = async (classes: ClassSession[], langua
   if (!hasPermission) return;
 
   const minutesBefore = await getMinutesBefore();
+  const classMode = await getClassModeType();
 
   for (const session of classes) {
     const triggerDate = calculateNextOccurrence(session.day, session.startTime, minutesBefore);
@@ -112,6 +122,62 @@ export const scheduleClassNotifications = async (classes: ClassSession[], langua
           weekday: session.day === 6 ? 1 : session.day + 2, // Map our 0-6 to Expo's 1-7 (Sun=1)
           hour: triggerDate.getHours(),
           minute: triggerDate.getMinutes(),
+          repeats: true,
+        },
+      });
+    }
+
+    if (classMode !== 'none') {
+      const startTriggerDate = calculateNextOccurrence(session.day, session.startTime, 0);
+      
+      if (startTriggerDate > new Date()) {
+        const title = language === 'tr' ? 'Ders Başladı!' : 'Class Started!';
+        let body = language === 'tr' 
+          ? `${session.courseName} dersiniz başladı. Lütfen telefonunuzu sessize alın.` 
+          : `${session.courseName} has started. Please mute your phone.`;
+
+        if (classMode === 'settings') {
+           body += language === 'tr' ? ' (Ses ayarlarına gitmek için dokunun)' : ' (Tap to open Sound Settings)';
+        }
+
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title,
+            body,
+            data: { classId: session.id, isClassMode: true, classModeType: classMode },
+            sound: true,
+          },
+          trigger: {
+            type: Notifications.SchedulableTriggerInputTypes.CALENDAR,
+            weekday: session.day === 6 ? 1 : session.day + 2,
+            hour: startTriggerDate.getHours(),
+            minute: startTriggerDate.getMinutes(),
+            repeats: true,
+          },
+        });
+      }
+    }
+
+    // Attendance reminder at end of class
+    const endTriggerDate = calculateNextOccurrence(session.day, session.endTime, 0);
+    if (endTriggerDate > new Date()) {
+      const attendanceTitle = language === 'tr' ? 'Devamsızlık Kaydı' : 'Attendance Check';
+      const attendanceBody = language === 'tr'
+        ? `${session.courseName} dersiniz bitti. Bugün derse katıldınız mı? Devamsızlık durumunuzu güncelleyin.`
+        : `${session.courseName} has ended. Did you attend? Update your attendance.`;
+
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: attendanceTitle,
+          body: attendanceBody,
+          data: { classId: session.id, isAttendanceReminder: true },
+          sound: true,
+        },
+        trigger: {
+          type: Notifications.SchedulableTriggerInputTypes.CALENDAR,
+          weekday: session.day === 6 ? 1 : session.day + 2,
+          hour: endTriggerDate.getHours(),
+          minute: endTriggerDate.getMinutes(),
           repeats: true,
         },
       });

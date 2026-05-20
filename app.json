@@ -27,7 +27,11 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "permissions": ["android.permission.CAMERA", "android.permission.READ_EXTERNAL_STORAGE", "android.permission.SCHEDULE_EXACT_ALARM"]
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.SCHEDULE_EXACT_ALARM"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -39,6 +43,12 @@
       "expo-secure-store",
       "expo-localization",
       [
+        "expo-calendar",
+        {
+          "calendarPermission": "The app accesses your calendar to sync class schedules."
+        }
+      ],
+      [
         "expo-image-picker",
         {
           "photosPermission": "The app accesses your photos to let you upload class schedules."
@@ -49,7 +59,24 @@
         {
           "icon": "./assets/images/icon.png",
           "color": "#8B5CF6",
-          "sounds": ["default"]
+          "sounds": [
+            "default"
+          ]
+        }
+      ],
+      [
+        "react-native-android-widget",
+        {
+          "widgets": [
+            {
+              "name": "ClassReminder",
+              "label": "Sıradaki Ders",
+              "minWidth": "150dp",
+              "minHeight": "100dp",
+              "description": "Shows your next class",
+              "previewImage": "./assets/images/icon.png"
+            }
+          ]
         }
       ]
     ],

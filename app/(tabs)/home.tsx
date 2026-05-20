@@ -1,25 +1,40 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Animated } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Plus } from 'lucide-react-native';
 import { useTheme } from '../../src/contexts/ThemeContext';
 import { useSchedule } from '../../src/contexts/ScheduleContext';
 import { ClassCard } from '../../src/components/ClassCard';
 import { DaySelector } from '../../src/components/DaySelector';
+import { WeeklyGridView } from '../../src/components/WeeklyGridView';
+import { STORAGE_KEYS, DEFAULT_PREFERENCES } from '../../src/utils/constants';
 
 export default function HomeScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const { theme } = useTheme();
   const { classes } = useSchedule();
+  const insets = useSafeAreaInsets();
 
   // Determine current day (0 = Monday, 6 = Sunday)
   const today = new Date().getDay();
   const initialDay = today === 0 ? 6 : today - 1; 
   
   const [selectedDay, setSelectedDay] = useState(initialDay);
+  const [useGridView, setUseGridView] = useState(DEFAULT_PREFERENCES.USE_GRID_VIEW);
+
+  useFocusEffect(
+    useCallback(() => {
+      const loadPreference = async () => {
+        const grid = await AsyncStorage.getItem(STORAGE_KEYS.USE_GRID_VIEW);
+        if (grid !== null) setUseGridView(grid === 'true');
+      };
+      loadPreference();
+    }, [])
+  );
 
   const filteredClasses = useMemo(() => {
     return classes
@@ -41,24 +56,29 @@ export default function HomeScreen() {
         <Text style={[styles.title, { color: theme.text.primary }]}>{t('home.title')}</Text>
       </View>
 
-      <DaySelector selectedDay={selectedDay} onSelectDay={setSelectedDay} />
-
-      {filteredClasses.length === 0 ? (
-        <View style={styles.emptyState}>
-          <Text style={[styles.emptyText, { color: theme.text.tertiary }]}>
-            {t('home.noClasses')}
-          </Text>
-        </View>
+      {useGridView ? (
+        <WeeklyGridView classes={classes} onClassPress={handleClassPress} />
       ) : (
-        <FlatList
-          data={filteredClasses}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.listContent}
-          renderItem={({ item }) => (
-            <ClassCard session={item} onPress={() => handleClassPress(item.id)} />
+        <>
+          <DaySelector selectedDay={selectedDay} onSelectDay={setSelectedDay} />
+          {filteredClasses.length === 0 ? (
+            <View style={styles.emptyState}>
+              <Text style={[styles.emptyText, { color: theme.text.tertiary }]}>
+                {t('home.noClasses')}
+              </Text>
+            </View>
+          ) : (
+            <FlatList
+              data={filteredClasses}
+              keyExtractor={(item) => item.id}
+              contentContainerStyle={styles.listContent}
+              renderItem={({ item }) => (
+                <ClassCard session={item} onPress={() => handleClassPress(item.id)} />
+              )}
+              showsVerticalScrollIndicator={false}
+            />
           )}
-          showsVerticalScrollIndicator={false}
-        />
+        </>
       )}
 
       <TouchableOpacity
@@ -66,7 +86,8 @@ export default function HomeScreen() {
           styles.fab,
           { 
             backgroundColor: theme.purple.medium,
-            shadowColor: theme.glow ? theme.purple.medium : '#000'
+            shadowColor: theme.glow ? theme.purple.medium : '#000',
+            bottom: 80 + Math.max(insets.bottom, 0)
           }
         ]}
         onPress={handleAddClass}

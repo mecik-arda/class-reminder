@@ -41,4 +41,6 @@ export interface ClassSession {
   startTime: string; // "09:00" format
   endTime: string; // "10:30" format
   notes?: string;
+  absences?: number; // Number of absences recorded
+  absenceLimit?: number; // Max absences allowed before failing
 }

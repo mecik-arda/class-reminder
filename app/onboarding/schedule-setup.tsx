@@ -29,7 +29,7 @@ export default function ScheduleSetupScreen() {
     if (!apiKey) {
       Alert.alert(
         "API Key Required",
-        "You need a Claude API key to use the AI scanning feature. Please add it in Settings or go back.",
+        "You need a Gemini API key to use the AI scanning feature. Please add it in Settings or go back.",
         [{ text: "OK" }]
       );
       return;
@@ -46,7 +46,7 @@ export default function ScheduleSetupScreen() {
       mediaTypes: ['images'],
       allowsEditing: true,
       quality: 0.8,
-      base64: true, // We need base64 for Claude API
+      base64: true, // We need base64 for Gemini API
     });
 
     if (!result.canceled && result.assets[0].base64) {

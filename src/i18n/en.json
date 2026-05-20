@@ -11,9 +11,9 @@
     "uploadDesc": "We'll automatically extract your classes using AI",
     "enterManually": "Enter Manually",
     "manualDesc": "Add your classes one by one manually",
-    "apiKeyTitle": "Claude API Key",
-    "apiKeyDesc": "To automatically extract your schedule from a photo, please enter your Anthropic Claude API Key. This is stored securely on your device.",
-    "apiKeyPlaceholder": "sk-ant-api03-...",
+    "apiKeyTitle": "Gemini API Key",
+    "apiKeyDesc": "To automatically extract your schedule from a photo, please enter your Google Gemini API Key. This is stored securely on your device.",
+    "apiKeyPlaceholder": "AIzaSy...",
     "skipForNow": "Skip for now (Manual entry only)"
   },
   "home": {
@@ -73,7 +73,7 @@
     "editSchedule": "Edit Schedule",
     "deleteSchedule": "Delete Schedule",
     "developer": "Developer",
-    "apiKey": "Claude API Key",
+    "apiKey": "Gemini API Key",
     "updateKey": "Update Key",
     "deleteScheduleConfirm": "Are you sure you want to delete your entire schedule? This cannot be undone."
   },

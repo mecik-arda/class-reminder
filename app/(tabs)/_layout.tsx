@@ -4,10 +4,12 @@ import { CalendarDays, Settings } from 'lucide-react-native';
 import { useTheme } from '../../src/contexts/ThemeContext';
 import { BlurView } from 'expo-blur';
 import { Platform, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function TabLayout() {
   const { t } = useTranslation();
   const { theme, isDark } = useTheme();
+  const insets = useSafeAreaInsets();
 
   return (
     <Tabs
@@ -20,8 +22,8 @@ export default function TabLayout() {
           backgroundColor: Platform.OS === 'ios' ? 'transparent' : theme.background.secondary,
           borderTopWidth: 0,
           elevation: 0,
-          height: 60,
-          paddingBottom: 8,
+          height: 60 + Math.max(insets.bottom, 10),
+          paddingBottom: 8 + Math.max(insets.bottom, 0),
           paddingTop: 8,
         },
         tabBarBackground: () => 

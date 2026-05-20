@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../src/contexts/ThemeContext';
 import { KeyRound } from 'lucide-react-native';
@@ -9,6 +9,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ApiKeyScreen() {
   const router = useRouter();
+  const params = useLocalSearchParams();
   const { t } = useTranslation();
   const { theme } = useTheme();
   const [apiKey, setApiKey] = useState('');
@@ -17,11 +18,19 @@ export default function ApiKeyScreen() {
     if (apiKey.trim().length > 0) {
       await saveApiKey(apiKey.trim());
     }
-    router.push('/onboarding/schedule-setup');
+    if (params.from === 'settings') {
+      router.back();
+    } else {
+      router.push('/onboarding/schedule-setup');
+    }
   };
 
   const handleSkip = () => {
-    router.push('/onboarding/schedule-setup');
+    if (params.from === 'settings') {
+      router.back();
+    } else {
+      router.push('/onboarding/schedule-setup');
+    }
   };
 
   return (

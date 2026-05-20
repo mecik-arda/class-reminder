@@ -11,9 +11,9 @@
     "uploadDesc": "Yapay zeka ile derslerinizi otomatik çıkaralım",
     "enterManually": "Elle Gir",
     "manualDesc": "Derslerinizi tek tek elle ekleyin",
-    "apiKeyTitle": "Claude API Anahtarı",
-    "apiKeyDesc": "Ders programınızı bir fotoğraftan otomatik olarak çıkarmak için lütfen Anthropic Claude API Anahtarınızı girin. Bu bilgi cihazınızda güvenle saklanır.",
-    "apiKeyPlaceholder": "sk-ant-api03-...",
+    "apiKeyTitle": "Gemini API Anahtarı",
+    "apiKeyDesc": "Ders programınızı bir fotoğraftan otomatik olarak çıkarmak için lütfen Google Gemini API Anahtarınızı girin. Bu bilgi cihazınızda güvenle saklanır.",
+    "apiKeyPlaceholder": "AIzaSy...",
     "skipForNow": "Şimdilik Atla (Sadece elle giriş)"
   },
   "home": {
@@ -73,7 +73,7 @@
     "editSchedule": "Programı Düzenle",
     "deleteSchedule": "Programı Sil",
     "developer": "Geliştirici",
-    "apiKey": "Claude API Anahtarı",
+    "apiKey": "Gemini API Anahtarı",
     "updateKey": "Anahtarı Güncelle",
     "deleteScheduleConfirm": "Tüm programınızı silmek istediğinize emin misiniz? Bu işlem geri alınamaz."
   },

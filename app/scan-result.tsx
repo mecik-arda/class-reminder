@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../src/contexts/ThemeContext';
 import { useLanguage } from '../src/contexts/LanguageContext';
 import { useSchedule } from '../src/contexts/ScheduleContext';
-import { scanSchedule } from '../src/services/claude';
+import { scanSchedule } from '../src/services/gemini';
 import { getApiKey } from '../src/services/secureStorage';
 import { ClassSession } from '../src/types';
 import { Check, X } from 'lucide-react-native';
@@ -25,19 +25,20 @@ export default function ScanResultScreen() {
 
   useEffect(() => {
     if (params.base64 && typeof params.base64 === 'string') {
-      performScan(params.base64);
+      const mimeType = typeof params.mimeType === 'string' ? params.mimeType : 'image/jpeg';
+      performScan(params.base64, mimeType);
     } else {
-      setError("No image data provided");
+      setError("No file data provided");
       setIsScanning(false);
     }
-  }, [params.base64]);
+  }, [params.base64, params.mimeType]);
 
-  const performScan = async (base64: string) => {
+  const performScan = async (base64: string, mimeType: string) => {
     try {
       const apiKey = await getApiKey();
       if (!apiKey) throw new Error("API Key not found");
 
-      const result = await scanSchedule(base64, language, apiKey);
+      const result = await scanSchedule(base64, mimeType, language, apiKey);
       
       // Process and validate result
       const newClasses: ClassSession[] = result.classes.map((c, index) => ({

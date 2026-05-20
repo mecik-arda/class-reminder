@@ -1,5 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
+import { requestWidgetUpdate } from 'react-native-android-widget';
+import { widgetTaskHandler } from '../../widget/WidgetTaskHandler';
 import { ClassSession } from '../types';
 import { STORAGE_KEYS } from '../utils/constants';
 
@@ -50,6 +53,15 @@ export const ScheduleProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     try {
       await AsyncStorage.setItem(STORAGE_KEYS.SCHEDULE, JSON.stringify(newClasses));
       setClasses(newClasses);
+      if (Platform.OS === 'android') {
+        try {
+          requestWidgetUpdate({
+            widgetName: 'NextClass',
+            renderWidget: () => null as any,
+            widgetTaskHandler,
+          });
+        } catch (e) {}
+      }
     } catch (error) {
       console.error('Failed to save schedule:', error);
       throw error;

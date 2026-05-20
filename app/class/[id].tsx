@@ -1,11 +1,12 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, TextInput } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ArrowLeft, Clock, MapPin, User, FileText, Edit2, Trash2 } from 'lucide-react-native';
+import { ArrowLeft, Clock, MapPin, User, FileText, Edit2, Trash2, Minus, Plus, AlertTriangle } from 'lucide-react-native';
 import { useTheme } from '../../src/contexts/ThemeContext';
 import { useSchedule } from '../../src/contexts/ScheduleContext';
+import { useLanguage } from '../../src/contexts/LanguageContext';
 import { DAYS_OF_WEEK } from '../../src/utils/constants';
 
 export default function ClassDetailScreen() {
@@ -13,7 +14,8 @@ export default function ClassDetailScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const { theme } = useTheme();
-  const { classes, deleteClass } = useSchedule();
+  const { classes, deleteClass, updateClass } = useSchedule();
+  const { language } = useLanguage();
 
   const classSession = classes.find(c => c.id === id);
   const dayKeys = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
@@ -49,6 +51,33 @@ export default function ClassDetailScreen() {
 
   const handleEdit = () => {
     router.push(`/add-class?id=${classSession.id}`);
+  };
+
+  // Attendance state
+  const absences = classSession.absences || 0;
+  const [isEditingLimit, setIsEditingLimit] = useState(false);
+  const [limitInput, setLimitInput] = useState(String(classSession.absenceLimit || 4));
+  const absenceLimit = classSession.absenceLimit || 4;
+  const absencePercent = absenceLimit > 0 ? Math.min((absences / absenceLimit) * 100, 100) : 0;
+  const isWarning = absencePercent >= 75;
+  const isDanger = absencePercent >= 100;
+
+  const handleIncrement = async () => {
+    await updateClass({ ...classSession, absences: absences + 1 });
+  };
+
+  const handleDecrement = async () => {
+    if (absences > 0) {
+      await updateClass({ ...classSession, absences: absences - 1 });
+    }
+  };
+
+  const handleSaveLimit = async () => {
+    const parsed = parseInt(limitInput, 10);
+    if (!isNaN(parsed) && parsed > 0) {
+      await updateClass({ ...classSession, absenceLimit: parsed });
+    }
+    setIsEditingLimit(false);
   };
 
   const DetailRow = ({ icon: Icon, label, value }: any) => {
@@ -120,6 +149,87 @@ export default function ClassDetailScreen() {
             </Text>
           </View>
         ) : null}
+
+        {/* Attendance Tracker Card */}
+        <View style={[styles.attendanceCard, { backgroundColor: theme.card.background, borderColor: isDanger ? '#EF4444' : isWarning ? '#F59E0B' : theme.card.border }]}>
+          <View style={styles.attendanceHeader}>
+            <View style={styles.attendanceHeaderLeft}>
+              <AlertTriangle size={18} color={isDanger ? '#EF4444' : isWarning ? '#F59E0B' : theme.purple.medium} />
+              <Text style={[styles.attendanceTitle, { color: theme.text.primary }]}>
+                {language === 'tr' ? 'Devamsızlık Takibi' : 'Attendance Tracker'}
+              </Text>
+            </View>
+          </View>
+
+          {/* Progress Bar */}
+          <View style={[styles.progressBarBg, { backgroundColor: theme.card.border }]}>
+            <View style={[
+              styles.progressBarFill,
+              {
+                width: `${absencePercent}%`,
+                backgroundColor: isDanger ? '#EF4444' : isWarning ? '#F59E0B' : theme.purple.medium
+              }
+            ]} />
+          </View>
+          <Text style={[styles.progressLabel, { color: isDanger ? '#EF4444' : isWarning ? '#F59E0B' : theme.text.secondary }]}>
+            {absences} / {absenceLimit} {language === 'tr' ? 'devamsızlık kullanıldı' : 'absences used'}
+            {isDanger ? (language === 'tr' ? ' ⚠️ LİMİT AŞILDI!' : ' ⚠️ LIMIT EXCEEDED!') : ''}
+          </Text>
+
+          {/* +/- Buttons */}
+          <View style={styles.attendanceActions}>
+            <TouchableOpacity
+              onPress={handleDecrement}
+              style={[styles.attendanceBtn, { backgroundColor: theme.card.border }]}
+              disabled={absences <= 0}
+            >
+              <Minus size={22} color={absences <= 0 ? theme.text.tertiary : theme.text.primary} />
+            </TouchableOpacity>
+
+            <View style={styles.absenceCountBox}>
+              <Text style={[styles.absenceCount, { color: isDanger ? '#EF4444' : isWarning ? '#F59E0B' : theme.text.primary }]}>
+                {absences}
+              </Text>
+              <Text style={[styles.absenceCountLabel, { color: theme.text.tertiary }]}>
+                {language === 'tr' ? 'Devamsız' : 'Absent'}
+              </Text>
+            </View>
+
+            <TouchableOpacity
+              onPress={handleIncrement}
+              style={[styles.attendanceBtn, { backgroundColor: isDanger ? '#FEE2E2' : isWarning ? '#FEF3C7' : theme.purple.light + '30' }]}
+            >
+              <Plus size={22} color={isDanger ? '#EF4444' : isWarning ? '#F59E0B' : theme.purple.medium} />
+            </TouchableOpacity>
+          </View>
+
+          {/* Limit Setting */}
+          <View style={[styles.limitRow, { borderTopColor: theme.card.border }]}>
+            <Text style={[styles.limitLabel, { color: theme.text.secondary }]}>
+              {language === 'tr' ? 'Devamsızlık Limiti:' : 'Absence Limit:'}
+            </Text>
+            {isEditingLimit ? (
+              <View style={styles.limitEditRow}>
+                <TextInput
+                  style={[styles.limitInput, { color: theme.text.primary, borderColor: theme.purple.medium }]}
+                  value={limitInput}
+                  onChangeText={setLimitInput}
+                  keyboardType="number-pad"
+                  autoFocus
+                />
+                <TouchableOpacity onPress={handleSaveLimit} style={[styles.limitSaveBtn, { backgroundColor: theme.purple.medium }]}>
+                  <Text style={styles.limitSaveBtnText}>OK</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <TouchableOpacity onPress={() => { setLimitInput(String(absenceLimit)); setIsEditingLimit(true); }}>
+                <Text style={[styles.limitValue, { color: theme.purple.medium }]}>
+                  {absenceLimit} {language === 'tr' ? 'hafta' : 'weeks'} ✏️
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -228,5 +338,107 @@ const styles = StyleSheet.create({
   notesText: {
     fontSize: 15,
     lineHeight: 24,
+  },
+  attendanceCard: {
+    borderRadius: 20,
+    borderWidth: 1.5,
+    padding: 20,
+    marginTop: 24,
+  },
+  attendanceHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  attendanceHeaderLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  attendanceTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  progressBarBg: {
+    height: 10,
+    borderRadius: 5,
+    overflow: 'hidden',
+    marginBottom: 8,
+  },
+  progressBarFill: {
+    height: '100%',
+    borderRadius: 5,
+  },
+  progressLabel: {
+    fontSize: 13,
+    fontWeight: '600',
+    marginBottom: 16,
+  },
+  attendanceActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 28,
+    marginBottom: 16,
+  },
+  attendanceBtn: {
+    width: 50,
+    height: 50,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  absenceCountBox: {
+    alignItems: 'center',
+  },
+  absenceCount: {
+    fontSize: 36,
+    fontWeight: 'bold',
+  },
+  absenceCountLabel: {
+    fontSize: 12,
+    fontWeight: '500',
+    marginTop: -2,
+  },
+  limitRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderTopWidth: StyleSheet.hairlineWidth,
+    paddingTop: 14,
+  },
+  limitLabel: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  limitValue: {
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  limitEditRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  limitInput: {
+    borderWidth: 1.5,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    fontSize: 16,
+    fontWeight: '600',
+    width: 60,
+    textAlign: 'center',
+  },
+  limitSaveBtn: {
+    borderRadius: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+  },
+  limitSaveBtnText: {
+    color: '#FFF',
+    fontWeight: 'bold',
+    fontSize: 14,
   },
 });
